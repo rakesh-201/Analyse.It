@@ -1,10 +1,13 @@
 async function upload_data(data, client){
     try{
+        client.query("BEGIN");
+
         client.query("TRUNCATE entities;");
     
         data.map(async(d) => {
-            await client.query(`INSERT INTO entities(name, pin, district, geom) VALUES (${d.name}, ${d.pin}, ${d.district}, 'POINT(${d.lng} ${d.lat})');`)
+            await client.query(`INSERT INTO entities(name, pin, district, geom) VALUES ('${d.name}', '${d.pin}', '${d.district}', 'POINT(${d.lng} ${d.lat})');`)
         })
+        client.query("COMMIT");
     }
     catch(err){
         console.log(err);
@@ -14,6 +17,8 @@ async function upload_data(data, client){
 async function find_avg(client){
     try{
         const res = client.query("SELECT AVG(d.covid_case) FROM entities AS e INNER JOIN districts AS d ON e.district = d.district;")
+        
+        
         return res;
     }
     catch(err){

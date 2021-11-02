@@ -15,10 +15,10 @@ const find_cases = require("./Utilities/spatialFunctions").find_cases;
 
 const client = new Client({
   user: "postgres",
-  password: "atharvabho",
+  password: "Optics@#12345",
   host: "localhost",
   port: "5432",
-  database: "SGD",
+  database: "Project!",
 });
 
 client
@@ -46,7 +46,8 @@ app.get("/analyse", (req, res) => {
 });
 
 app.post("/analyse", async (req, res) => {
-  console.log(req.body);
+  try{
+  // console.log(req.body);
 
   const data = req.body.data;
 
@@ -55,8 +56,11 @@ app.post("/analyse", async (req, res) => {
   await upload_data(data, client);
 
   let avg = await find_avg(client);
+  console.log(avg)
 
   avg = avg.rows[0].avg
+
+  console.log(avg)
 
   let tot_avg = await find_tot_avg(client);
 
@@ -73,6 +77,10 @@ app.post("/analyse", async (req, res) => {
   cases = cases.rows[0].covid_case
 
   res.json({avg, tot_avg, result, dist, cases});
+  }
+  catch (err){
+    console.log(err)
+  }
 });
 
 app.get('/all_data', async(req, res) => {

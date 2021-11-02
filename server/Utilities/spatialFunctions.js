@@ -1,24 +1,19 @@
 async function upload_data(data, client){
     try{
-        await client.query("TRUNCATE entities;");
-        
-        await client.query("BEGIN");
-
+        client.query("TRUNCATE entities;");
+    
         data.map(async(d) => {
-            await client.query(`INSERT INTO entities VALUES (${d.name}, ${d.pin}, ${d.district}, 'POINT(${d.lng} ${d.lat})');`)
+            await client.query(`INSERT INTO entities(name, pin, district, geom) VALUES (${d.name}, ${d.pin}, ${d.district}, 'POINT(${d.lng} ${d.lat})');`)
         })
-
-        await client.query("COMMIT")
     }
     catch(err){
         console.log(err);
-        await client.query("ROLLBACK")
         return -1;
     }
 }
 async function find_avg(client){
     try{
-        const res = client.query("SELECT AVG(d.covid_case) FROM entities AS e, districts AS d ON e.district = d.district;")
+        const res = client.query("SELECT AVG(d.covid_case) FROM entities AS e INNER JOIN districts AS d ON e.district = d.district;")
         return res;
     }
     catch(err){

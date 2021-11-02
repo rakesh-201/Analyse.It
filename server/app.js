@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -11,22 +12,27 @@ const find_tot_avg = require("./Utilities/spatialFunctions").find_tot_avg;
 const find_avg_dist = require("./Utilities/spatialFunctions").find_avg_dist;
 const find_cases = require("./Utilities/spatialFunctions").find_cases;
 
+
 const client = new Client({
   user: "postgres",
-  password: "Optics@#12345",
+  password: "atharvabho",
   host: "localhost",
   port: "5432",
-  database: "Project!",
+  database: "SGD",
 });
 
 client
   .connect()
-  .then(async () => {
+  .then(async() => {
     console.log("connected")
-    // let res = await xdxd
-    console.table(res.rows)
+    await client.query("BEGIN");
+    const res = await find_cases({lat: 19.0760, lng: 72.8777}, client);
+    console.log(res.rows[0].covid_case)
+    await client.query("COMMIT");
   })
   .catch((err) => console.error(err));
+
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -48,15 +54,23 @@ app.post("/analyse", async (req, res) => {
 
   await upload_data(data, client);
 
-  const avg = find_avg(client);
+  let avg = await find_avg(client);
 
-  const tot_avg = find_tot_avg(client);
+  avg = avg.rows[0].avg
 
-  const result = avg >= tot_avg ? false : true;
+  let tot_avg = await find_tot_avg(client);
 
-  const dist = find_avg_dist(cur_loc, client);
+  tot_avg = tot_avg.rows[0].avg
 
-  const cases = find_cases(cur_loc, client);
+  let result = await avg >= tot_avg ? false : true;
+
+  let dist = await find_avg_dist(cur_loc, client);
+
+  dist = dist.rows[0].avg
+
+  let cases = await find_cases(cur_loc, client);
+
+  cases = cases.rows[0].covid_case
 
   res.json({avg, tot_avg, result, dist, cases});
 });
@@ -69,3 +83,4 @@ app.get('/all_data', async(req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+

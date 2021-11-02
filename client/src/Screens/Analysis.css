@@ -1,0 +1,33 @@
+.sidebar{
+    height: 88vh;
+}
+
+.box{
+    background-color: grey;
+    height: 10rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 1.1rem;
+    border: 10px solid rgba(199, 193, 193, 0.02);
+}
+
+.text {
+    font-size: 2rem;
+}
+
+.mtext{
+    font-size: 3rem;
+}
+
+.cont {
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.middle{
+    color: rgb(209, 204, 204);
+}

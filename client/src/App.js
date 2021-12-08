@@ -2,16 +2,20 @@ import "./App.css";
 import Navbar from "./Components/Navbar";
 import Analysis from "./Screens/Analysis";
 import Map from "./Screens/Map";
-
+import {BrowserRouter as Router, Route} from "react-router-dom"
+import Table from "./Screens/Table";
 
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      {/* <Map /> */}
-      <Analysis />
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Route path="/" component={Map} exact />
+        <Route path="/analysis" component={Analysis} exact />
+        <Route path="/table" component={Table} exact />
+      </div>
+    </Router>
   );
 }
 

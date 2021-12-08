@@ -31,3 +31,28 @@
 .middle{
     color: rgb(209, 204, 204);
 }
+
+.image {
+    height: 20rem;
+}
+
+.end {
+    align-self: baseline;
+}
+
+.button {
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    width: 220px;
+}
+
+.btn1{
+    width: 250px;
+}
+
+.cont1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}

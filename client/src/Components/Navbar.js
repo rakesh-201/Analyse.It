@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import GeoCode from "react-geocode";
 import { file_upload, save_results } from "../store/actions/file";
 import NavbarUI from "./NavbarUI";
+import {Redirect} from "react-router-dom"
 
-const Navbar = () => {
+function Navbar() {
   const [file, setFile] = useState(null);
+  const [go, setGo] = useState(0);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setGo(0)
+  }, [])
 
   const fileHandler = (files) => {
     if (!files.length) {
@@ -46,7 +52,7 @@ const Navbar = () => {
     }
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     let arr = [];
 
     console.log(file);
@@ -100,22 +106,38 @@ const Navbar = () => {
     //   }
     // });
 
-    dispatch(file_upload(file));
+    
+    await dispatch(file_upload(file));
 
     axios
       .post("/analyse", {
         data: file,
+        cur_loc: {
+          lat: "27",
+          lng: "72"
+        }
       })
       .then((res) => {
         console.log(res);
         dispatch(save_results(res));
-        // <Redirect to="/analysis" push />
-
+      })
+      .then(() => {
+        setGo(1);
+        console.log("this")
       })
       .catch((err) => console.log(err));
   };
 
-  return <NavbarUI fileHandler={fileHandler} submitHandler={submitHandler} />;
+  return (<span>
+    <NavbarUI fileHandler={fileHandler} submitHandler={submitHandler} />
+    {
+      go
+      ?
+      <Redirect push to="/analysis" />
+      :
+      null
+    }
+  </span>);
 };
 
 export default Navbar;

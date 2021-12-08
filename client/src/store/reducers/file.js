@@ -16,7 +16,7 @@ export default (state = initialState, actions) => {
     case SAVE_RESULTS:
       return {
         ...state,
-        results: actions.results,
+        results: actions.results.data,
       };
 
     default:

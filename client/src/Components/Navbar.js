@@ -6,9 +6,10 @@ import GeoCode from "react-geocode";
 import { file_upload, save_results } from "../store/actions/file";
 import NavbarUI from "./NavbarUI";
 import {Redirect} from "react-router-dom"
+import { Marker } from "react-leaflet";
 
 function Navbar() {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState([]);
   const [go, setGo] = useState(0);
 
   const dispatch = useDispatch();
@@ -106,8 +107,12 @@ function Navbar() {
     //   }
     // });
 
+
+    console.log(file);
     
     await dispatch(file_upload(file));
+
+    // /*  */ setGo(1);
 
     axios
       .post("/analyse", {
@@ -133,7 +138,7 @@ function Navbar() {
     {
       go
       ?
-      <Redirect push to="/analysis" />
+        <Redirect push to="/analysis" />
       :
       null
     }

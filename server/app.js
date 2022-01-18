@@ -5,12 +5,14 @@ const app = express();
 const port = 5000;
 const bodyParser = require("body-parser");
 const { Client } = require("pg");
+const neo4j = require("neo4j-driver");
 
 const upload_data = require("./Utilities/spatialFunctions").upload_data;
 const find_avg = require("./Utilities/spatialFunctions").find_avg;
 const find_tot_avg = require("./Utilities/spatialFunctions").find_tot_avg;
 const find_avg_dist = require("./Utilities/spatialFunctions").find_avg_dist;
 const find_cases = require("./Utilities/spatialFunctions").find_cases;
+const { insert, count } = require("./Utilities/graphFunctions");
 
 
 const client = new Client({
@@ -32,7 +34,8 @@ client
   })
   .catch((err) => console.error(err));
 
-
+const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '1234'))
+const session = driver.session();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -76,12 +79,20 @@ app.post("/analyse", async (req, res) => {
 
   cases = cases.rows[0].covid_case
 
+  await insert(data, cur_loc, client, session)
+  // await count(dist, session)
   res.json({avg, tot_avg, result, dist, cases});
   }
   catch (err){
     console.log(err)
   }
 });
+
+// app.post('/count', async(req, res) => {
+//   const dist = req.body.dist
+//   const r = await count(dist, session)
+//   res.json({result})
+// })
 
 app.get('/all_data', async(req, res) => {
   const result = await client.query("SELECT e.name, e.district, d.covid_case FROM districts AS d, entities AS e ON d.district = e.district;");

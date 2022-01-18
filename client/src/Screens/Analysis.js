@@ -63,8 +63,8 @@ const Analysis = () => {
                         <p className="text"><span className="mtext">{res.result ? "Yes" : "No"}</span></p>
                     </div>
                     <div className="col-5 box">
-                        <p>Cases</p>
-                        <p className="text"><span className="mtext">{res.result ? "Yes" : "No"}</span></p>
+                        <p>No. Of People</p>
+                        <p className="text"><span className="mtext">{res.result ? "----" : 12}</span></p>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,6 @@
 
+![Analyse.it Banner]()
+
 # Analyse.it
 
 Analyse.it is a website, built to help organizations, institutes and businesses in deciding wheather its the right time to open up their organizations and start functioning offline.

@@ -1,5 +1,5 @@
 
-![Analyse.it Banner]()
+![Analyse.it Banner](https://github.com/rakesh-201/Plot.It/blob/main/Analysis.it.gif)
 
 # Analyse.it
 
